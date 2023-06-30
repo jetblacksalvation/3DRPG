@@ -4,11 +4,45 @@ import './style.css'
 import { camera } from './main.js'
 
 var directionPointer = 0;
-var direction = [0, Math.PI/2, Math.PI ,(3*Math.PI)/2]
+var direction = [2*Math.PI, Math.PI/2, Math.PI ,(3*Math.PI)/2]
 export {direction};
 
+var Level =1;
+var LastLevel = 0;
+var LevelGrid = [];
+var PlayerPosition =[];
+
+export function LoadLevel(){
+    
+    //load level ...
+    if(LevelGrid.length == 0){
+        LevelGrid.push.apply(LevelGrid, [ 
+            [1,1,1],
+            [1,0,1],
+            [1,1,1]]);
+    }
+    if (PlayerPosition.length == 0){
+        PlayerPosition.push.apply(PlayerPosition,[1,1]);
+
+    }
+    // for(let x =0; x<LevelGrid.length; x++){
+    //     console.log(x, 'is part of level grid')
+    // }
+    // console.log(PlayerPosition, 'player pso')
+}
+
+function HandleGridMovement( keyValue){
+    LoadLevel();
+    console.log(LevelGrid, 'is grid');
+    if (typeof(LevelGrid) !== 'undefined') {
+    }
+    else{
+    }
+
+}
+
 window.addEventListener('keydown', function(event){
-    // console.log(event.key, " is key");
+    console.log(directionPointer, 'is direction');
 
     //theta = Math.atan2(vector.x,vector.z);
     console.log("The rotation is ", camera.rotation.y);
@@ -42,30 +76,9 @@ window.addEventListener('keydown', function(event){
     }
     camera.rotation.y = direction[directionPointer];
 })
-var Level =1;
-var LastLevel = 0;
-var LevelGrid;
-var PlayerPosition = [1,1];
 
-export {LevelGrid};
-export {PlayerPosition};
 
-function LoadLevel(){
-    if (Level != LastLevel){
-        //load level ...
-        LevelGrid = [
-            [1,1,1]
-            [1,0,1]
-            [1,1,1]
-        ]
-    }
-}
-function HandleGridMovement( keyValue){
-    if (typeof(LevelGrid) !== 'undefined') {
-    }
-    else{
-        LoadLevel();
-    }
 
-}
+export {LevelGrid, PlayerPosition};
+
 

@@ -1,12 +1,9 @@
 import * as THREE from 'three';
 //rendering objects
-import {scene} from "./main.js"
-import {camera} from "./main.js"
-import {renderer} from "./main.js"
+import {scene,camera, renderer} from "./main.js"
 //player and world data 
-import{LevelGrid} from "./InputHandler.js"
-import{PlayerPosition} from "./InputHandler.js"
-import{direction} from "./InputHandler.js"
+import {LoadLevel,LevelGrid,PlayerPosition, direction} from "./InputHandler.js"
+
 
 //change to be more dynamic later 
 const text = new THREE.TextureLoader().load("astolfo.jpg");
@@ -29,7 +26,6 @@ camera.position.x =2;
     // camera.position.z =1;
 console.log(cube.position, 'is cube');
 
-console.log(camera.position, 'is camera');
 // camera.rotation.y = 4.71238898038469;
 // cube.position.z =1;
 //left, figure out scale factor ...
@@ -38,13 +34,16 @@ console.log(camera.position, 'is camera');
 // camera.position.z = 5;
 renderer.render(scene,camera);
 
-
 function animate(){
     //draw level here 
+    
     requestAnimationFrame(animate);
     
     renderer.render(scene,camera);
-
+    // LoadLevel();
+    for(let x =0; x < LevelGrid.lenght; x++){
+        console.log(x);
+    }
 
 }
 
