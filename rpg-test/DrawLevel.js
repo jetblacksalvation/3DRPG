@@ -4,33 +4,44 @@ import {scene,camera, renderer} from "./main.js"
 //player and world data 
 var LevelGrid = [];
 var PlayerPosition =[];
+const listener = new THREE.AudioListener();
+camera.add( listener );
+const sound = new THREE.Audio( listener );
+
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load( 'Ikebukuro_Explore.mp3', function( buffer ) {
+	sound.setBuffer( buffer );
+	sound.setLoop( true );
+	sound.setVolume( 0.5 );
+	sound.play();
+});
 
 // var fr=new FileReader();//use this later. 
 //change to be more dynamic later 
-const text = new THREE.TextureLoader().load("astolfo.jpg");
+const text = new THREE.TextureLoader().load("brickWall.png");
 const cube = new THREE.Mesh( new THREE.BoxGeometry( 2, 2, 2 ),new  THREE.MeshBasicMaterial({map :text} ) );
 const cube2 = new THREE.Mesh( new THREE.BoxGeometry( 2, 2, 2 ),new  THREE.MeshBasicMaterial({map :text} ) );
 const cube3 = new THREE.Mesh(new THREE.BoxGeometry(2,2,2), new THREE.MeshBasicMaterial({map:text}));
 //right
-cube.position.x = 2;// x =0, z =2
+cube.position.x = 0;// x =0, z =2
 cube.position.z =2;
 cube.position.y = 0;
 //forwards
-cube2.position.x = 4;//x = 2, z= 0
+cube2.position.x = 2;//x = 2, z= 0
 cube2.position.z = 0;
 cube2.position.y = 0;
 //left
-cube3.position.x = 0;
-cube3.position.z = -2;
+cube3.position.x = -2;
+cube3.position.z = 0;
 
-scene.add( cube2 );
-scene.add( cube );
-scene.add(cube3);
+// scene.add( cube2 );
+// scene.add( cube );
+// scene.add(cube3);
 
 
 //decent enough...
 camera.position.y = 0;
-camera.position.x =2;
+camera.position.x =0;
     // camera.position.z =1;
 // console.log(cube.position, 'is cube');
 
@@ -42,20 +53,58 @@ camera.position.x =2;
 // camera.position.z = 5;
 renderer.render(scene,camera);
 var HasLoadedScene = false;
+var blue = new THREE.TextureLoader().load("blue.png");
+var road = new THREE.TextureLoader().load("road.png")
+// var map = new THREE.TextureLoader().load( "astolfo.jpg" );
+// var material = new THREE.SpriteMaterial( { map: map, color: 0xffffff } );
+// var sprite = new THREE.Sprite( material );
+// scene.add( sprite );
+// sprite.scale.set(1,1);
 
+
+
+LoadLevel();
+var CubeBuffer = [];
 function animate(){
     //draw level here 
 
     requestAnimationFrame(animate);
     renderer.renderLists.dispose();
+    for(let x =0; CubeBuffer.length >0&& x <CubeBuffer.length; x++){
+        scene.remove(CubeBuffer[x]);
+    }
+    CubeBuffer = [];
 
     // LoadLevel();
-
+    //clear buffer later... 
     for(let x =0; LevelGrid !== 'undefined' && x<LevelGrid.length; x++){
+        // console.log("level grid length =", LevelGrid.length);
         for (let y =0; y <LevelGrid[x].length; y++){
-            
+            if (LevelGrid[x][y] !== 'undefined' && LevelGrid[x][y] == 1 ){
+                CubeBuffer.push(new THREE.Mesh(new THREE.BoxGeometry(2,2,2), new THREE.MeshBasicMaterial({map:text})) );
+                CubeBuffer[CubeBuffer.length-1].position.x = (x - PlayerPosition[0])*2;
+                //y is actually z here...
+                CubeBuffer[CubeBuffer.length-1].position.z =( y - PlayerPosition[1])*2;
+
+            }
+            else if (LevelGrid[x][y] !== 'undefined' && LevelGrid[x][y] == 0 ){
+                CubeBuffer.push(new THREE.Mesh(new THREE.BoxGeometry(2,2,2), new THREE.MeshBasicMaterial({map:blue})));
+                CubeBuffer[CubeBuffer.length-1].position.x = (x - PlayerPosition[0])*2;
+                CubeBuffer[CubeBuffer.length-1].position.y = 2;
+                //y is actually z here...
+                CubeBuffer[CubeBuffer.length-1].position.z =( y - PlayerPosition[1])*2;
+
+                CubeBuffer.push(new THREE.Mesh(new THREE.BoxGeometry(2,2,2), new THREE.MeshBasicMaterial({map:road})));
+                CubeBuffer[CubeBuffer.length-1].position.x = (x - PlayerPosition[0])*2;
+                CubeBuffer[CubeBuffer.length-1].position.y = -2;
+                //y is actually z here...
+                CubeBuffer[CubeBuffer.length-1].position.z =( y - PlayerPosition[1])*2;
+            }
         }
         // console.log(LevelGrid[x], 'is x');
+    }
+    for(let x =0; CubeBuffer.length >0&& x <CubeBuffer.length; x++){
+        scene.add(CubeBuffer[x]);
     }
     renderer.render(scene,camera);
 
@@ -72,9 +121,11 @@ function LoadLevel(){
     //load level ...
     if(LevelGrid.length == 0){
         LevelGrid.push.apply(LevelGrid, [ 
-            [1,1,1],
-            [1,0,1],
-            [1,1,1]]);
+            [1,1,1,1,1],
+            [1,0,0,1],
+            [1,1,1]]
+            
+        );
     }
     if (PlayerPosition.length == 0){
         PlayerPosition.push.apply(PlayerPosition,[1,1]);
@@ -100,12 +151,10 @@ var direction = [0, Math.PI/2, Math.PI ,(3*Math.PI)/2]
 camera.rotation.y = direction[directionPointer];
 
 window.addEventListener('keydown', function(event){
-    console.log(directionPointer, 'is direction');
 
     //theta = Math.atan2(vector.x,vector.z);
-    console.log("The rotation is ", camera.rotation.y);
-    console.log("the x = ", camera.position.x);
-    console.log("the z = ", camera.position.z);
+    // console.log("the x = ", camera.position.x);
+    // console.log("the z = ", camera.position.z);
     //camera.rotation.y = what you are looking at 
     
     switch(event.key){
@@ -129,6 +178,7 @@ window.addEventListener('keydown', function(event){
                 camera.position.x +=2;
             }
             break;
+
         case 'e':
             if (directionPointer - 1 <0){
                 directionPointer = 3;
@@ -153,5 +203,9 @@ window.addEventListener('keydown', function(event){
             HandleGridMovement(event.key);
         
     }
+    console.log(directionPointer, 'is direction');
+
     camera.rotation.y = direction[directionPointer];
+    console.log("The rotation is ", camera.rotation.y);
+
 })
