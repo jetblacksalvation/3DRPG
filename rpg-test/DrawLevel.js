@@ -3,7 +3,9 @@ import * as THREE from 'three';
 import {scene,camera, renderer} from "./main.js"
 //player and world data 
 var LevelGrid = [];
-var PlayerPosition =[];
+
+var PlayerPosition =[];// x and z are used, camera is bound to y i think? 
+
 const listener = new THREE.AudioListener();
 camera.add( listener );
 const sound = new THREE.Audio( listener );
@@ -17,54 +19,19 @@ audioLoader.load( 'Ikebukuro_Explore.mp3', function( buffer ) {
 });
 
 // var fr=new FileReader();//use this later. 
+
 //change to be more dynamic later 
 const text = new THREE.TextureLoader().load("brickWall.png");
-const cube = new THREE.Mesh( new THREE.BoxGeometry( 2, 2, 2 ),new  THREE.MeshBasicMaterial({map :text} ) );
-const cube2 = new THREE.Mesh( new THREE.BoxGeometry( 2, 2, 2 ),new  THREE.MeshBasicMaterial({map :text} ) );
-const cube3 = new THREE.Mesh(new THREE.BoxGeometry(2,2,2), new THREE.MeshBasicMaterial({map:text}));
-//right
-cube.position.x = 0;// x =0, z =2
-cube.position.z =2;
-cube.position.y = 0;
-//forwards
-cube2.position.x = 2;//x = 2, z= 0
-cube2.position.z = 0;
-cube2.position.y = 0;
-//left
-cube3.position.x = -2;
-cube3.position.z = 0;
 
-// scene.add( cube2 );
-// scene.add( cube );
-// scene.add(cube3);
-
-
-//decent enough...
-camera.position.y = 0;
-camera.position.x =0;
-    // camera.position.z =1;
-// console.log(cube.position, 'is cube');
-
-// camera.rotation.y = 4.71238898038469;
-// cube.position.z =1;
-//left, figure out scale factor ...
-// cube.position.x = -2;
-// cube.position.z =2;
-// camera.position.z = 5;
 renderer.render(scene,camera);
 var HasLoadedScene = false;
 var blue = new THREE.TextureLoader().load("blue.png");
 var road = new THREE.TextureLoader().load("road.png")
-// var map = new THREE.TextureLoader().load( "astolfo.jpg" );
-// var material = new THREE.SpriteMaterial( { map: map, color: 0xffffff } );
-// var sprite = new THREE.Sprite( material );
-// scene.add( sprite );
-// sprite.scale.set(1,1);
-
-
 
 LoadLevel();
+
 var CubeBuffer = [];
+
 function animate(){
     //draw level here 
 
@@ -103,9 +70,10 @@ function animate(){
         }
         // console.log(LevelGrid[x], 'is x');
     }
-    for(let x =0; CubeBuffer.length >0&& x <CubeBuffer.length; x++){
+    for(let x =0; CubeBuffer.length >0 && x <CubeBuffer.length; x++){
         scene.add(CubeBuffer[x]);
     }
+    //add something here that handles events/ moments and states...
     renderer.render(scene,camera);
 
 }
@@ -114,10 +82,6 @@ function animate(){
 animate()
 //DIRECTION HANDLER 
 function LoadLevel(){
-    var temp = {Data:[[1,1,1],
-        [1,0,1],
-        [1,1,1]]};
-
     //load level ...
     if(LevelGrid.length == 0){
         LevelGrid.push.apply(LevelGrid, [ 
@@ -131,21 +95,8 @@ function LoadLevel(){
         PlayerPosition.push.apply(PlayerPosition,[1,1]);
 
     }
-    // for(let x =0; x<LevelGrid.length; x++){
-    //     console.log(x, 'is part of level grid')
-    // }
-    // console.log(PlayerPosition, 'player pso')
 }
 
-function HandleGridMovement( keyValue){
-    LoadLevel();
-    console.log(LevelGrid, 'is grid');
-    if (typeof(LevelGrid) !== 'undefined') {
-    }
-    else{
-    }
-
-}
 var directionPointer = 0;
 var direction = [0, Math.PI/2, Math.PI ,(3*Math.PI)/2]
 camera.rotation.y = direction[directionPointer];
@@ -166,16 +117,29 @@ window.addEventListener('keydown', function(event){
             break;
         case 'w':
             if (directionPointer == 0){
-                camera.position.z -=2;
+                if (LevelGrid[PlayerPosition[0]][PlayerPosition[1] -1] ==0 ){
+                    PlayerPosition[1] -=1;
+                }
+                // camera.position.z -=2;
             }
             else if(directionPointer ==1){
-                camera.position.x -=2;
+                if(LevelGrid[PlayerPosition[0] -1][PlayerPosition[1]] == 0){
+                    PlayerPosition[0] -=1;
+                }
+                // camera.position.x -=2;
             }
             else if(directionPointer ==2){
-                camera.position.z +=2;
+                if(LevelGrid[PlayerPosition[0]][PlayerPosition[1] +1 ] ==0){
+                    PlayerPosition[1] +=1;
+                }
+                // camera.position.z +=2;
             }
             else if(directionPointer ==3){
-                camera.position.x +=2;
+                if(LevelGrid[PlayerPosition[0] +1][PlayerPosition[1]] == 0){
+                    PlayerPosition[0] +=1;
+                }
+
+                // camera.position.x +=2;
             }
             break;
 
@@ -199,9 +163,9 @@ window.addEventListener('keydown', function(event){
             }
             //moves counter clock wise  
             break;
-        default:
-            HandleGridMovement(event.key);
-        
+        // default:
+        //     HandleGridMovement(event.key);
+        //f
     }
     console.log(directionPointer, 'is direction');
 
