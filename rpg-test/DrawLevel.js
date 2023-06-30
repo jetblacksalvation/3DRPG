@@ -50,17 +50,18 @@ function animate(){
     for(let x =0; LevelGrid !== 'undefined' && x<LevelGrid.length; x++){
         // console.log("level grid length =", LevelGrid.length);
         for (let y =0; y <LevelGrid[x].length; y++){
-            if (LevelGrid[x][y] !== 'undefined' && LevelGrid[x][y] == 1 ){
-                CubeBuffer.push(new THREE.Mesh(new THREE.BoxGeometry(2,2,2), new THREE.MeshBasicMaterial({map:text})) );
-                CubeBuffer[CubeBuffer.length-1].position.x = (x - PlayerPosition[0])*2;
-                //y is actually z here...
-                CubeBuffer[CubeBuffer.length-1].position.z =( y - PlayerPosition[1])*2;
+            CubeBuffer.push.apply(CubeBuffer,CellHandlerDict[LevelGrid[x][y]]['function']((x - PlayerPosition[0])*2, ( y - PlayerPosition[1])*2));
+            // if (LevelGrid[x][y] !== 'undefined' && LevelGrid[x][y] == 1 ){
+            //     CubeBuffer.push(new THREE.Mesh(new THREE.BoxGeometry(2,2,2), new THREE.MeshBasicMaterial({map:text})) );
+            //     CubeBuffer[CubeBuffer.length-1].position.x = (x - PlayerPosition[0])*2;
+            //     //y is actually z here...
+            //     CubeBuffer[CubeBuffer.length-1].position.z =( y - PlayerPosition[1])*2;
 
-            }
-            else if (LevelGrid[x][y] !== 'undefined' && LevelGrid[x][y] == 0 ){
-               CubeBuffer.push.apply(CubeBuffer, CellHandlerDict[0]['function']((x - PlayerPosition[0])*2,( y - PlayerPosition[1])*2));
+            // }
+            // else if (LevelGrid[x][y] !== 'undefined' && LevelGrid[x][y] == 0 ){
+            //    CubeBuffer.push.apply(CubeBuffer, CellHandlerDict[0]['function']((x - PlayerPosition[0])*2,( y - PlayerPosition[1])*2));
                
-            }
+            // }
         }
         // console.log(LevelGrid[x], 'is x');
     }

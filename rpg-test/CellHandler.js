@@ -5,7 +5,6 @@ import {BoxGeometry, MeshBasicMaterial,TextureLoader,Mesh} from 'three';
 
 class LoadThings{
     static LoadIfNotLoaded(string){
-        console.log("loading...")
         //where string is a file/dir to file 
         var isInsideDict = false;
         for(let k in this.LoadedInDict){
@@ -51,7 +50,17 @@ const CellHandlerDict = {
         return CubeBuffer;
 
     },'dependancies' :["blue.png", "road.png"], 'tileName':"RoadAndsky"},
-    1 : {}
+    1 : {'function':function(xPosition,zPosition){
+        for(let x in this.dependancies){
+            LoadThings.LoadIfNotLoaded(this.dependancies[x]);
+        }
+        var CubeBuffer = [];
+        CubeBuffer.push(new Mesh(new BoxGeometry(2,2,2), new MeshBasicMaterial({map:LoadThings.LoadedInDict[this.dependancies[0]]})) );
+        CubeBuffer[CubeBuffer.length-1].position.x = xPosition;
+        //y is actually z here...
+        CubeBuffer[CubeBuffer.length-1].position.z =zPosition;
+        return CubeBuffer;
+    }, 'dependancies' :["brickWall.png"], 'tileName':"bricks"}
 };
 
 export {CellHandlerDict};
