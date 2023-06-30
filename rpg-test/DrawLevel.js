@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 //rendering objects
 import {scene,camera, renderer} from "./main.js"
+import { createMachine, interpret } from 'xstate';
 //player and world data 
 var LevelGrid = [];
 
@@ -31,8 +32,10 @@ var road = new THREE.TextureLoader().load("road.png")
 LoadLevel();
 
 var CubeBuffer = [];
-
+import {CellHandlerDict} from "/CellHandler.js";
 function animate(){
+    //basicallly main...
+
     //draw level here 
 
     requestAnimationFrame(animate);
@@ -55,17 +58,8 @@ function animate(){
 
             }
             else if (LevelGrid[x][y] !== 'undefined' && LevelGrid[x][y] == 0 ){
-                CubeBuffer.push(new THREE.Mesh(new THREE.BoxGeometry(2,2,2), new THREE.MeshBasicMaterial({map:blue})));
-                CubeBuffer[CubeBuffer.length-1].position.x = (x - PlayerPosition[0])*2;
-                CubeBuffer[CubeBuffer.length-1].position.y = 2;
-                //y is actually z here...
-                CubeBuffer[CubeBuffer.length-1].position.z =( y - PlayerPosition[1])*2;
-
-                CubeBuffer.push(new THREE.Mesh(new THREE.BoxGeometry(2,2,2), new THREE.MeshBasicMaterial({map:road})));
-                CubeBuffer[CubeBuffer.length-1].position.x = (x - PlayerPosition[0])*2;
-                CubeBuffer[CubeBuffer.length-1].position.y = -2;
-                //y is actually z here...
-                CubeBuffer[CubeBuffer.length-1].position.z =( y - PlayerPosition[1])*2;
+               CubeBuffer.push.apply(CubeBuffer, CellHandlerDict[0]['function']((x - PlayerPosition[0])*2,( y - PlayerPosition[1])*2));
+               
             }
         }
         // console.log(LevelGrid[x], 'is x');
@@ -82,12 +76,21 @@ function animate(){
 animate()
 //DIRECTION HANDLER 
 function LoadLevel(){
+
     //load level ...
     if(LevelGrid.length == 0){
         LevelGrid.push.apply(LevelGrid, [ 
-            [1,1,1,1,1],
-            [1,0,0,1],
-            [1,1,1]]
+            [1,1,1,1,1,1,1],
+            [1,0,0,0,0,0,1],
+            [1,1,1,0,1,0,0,1],
+            [1,1,1,1,1,1,0,1],
+            [0,0,0,0,0,1,0,1],
+            [0,0,0,0,0,1,0,1],
+            [0,0,0,0,0,1,0,1]
+            [0,0,0,0,0,1,1,1]
+
+
+        ]
             
         );
     }
