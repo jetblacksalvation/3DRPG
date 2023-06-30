@@ -5,7 +5,9 @@ import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.j
 // const {camera} = require('./main.js');
 // const {window} = require('./main.js');
 import { camera } from './main.js'
-var direction = [false, false, false ,false]
+
+var directionPointer = 0;
+var direction = [0, Math.PI/2, Math.PI ,(3*Math.PI)/2]
 export {direction};
 
 window.addEventListener('keydown', function(event){
@@ -16,10 +18,7 @@ window.addEventListener('keydown', function(event){
     //camera.rotation.y = what you are looking at 
     
 
-    if (radians == Math.PI/2){
-        console.log("you are looking left");
-    }
-        // console.log(radians, "is radians");
+
 
     switch(event.key){
         case 'w':
@@ -32,11 +31,28 @@ window.addEventListener('keydown', function(event){
             break;
         case 'a':
             break;
-        default:
-            var heading = camera.rotation.y;
-            var radians = heading > 0 ? heading : (2 * Math.PI) + heading;
-            radians = radians % (Math.PI *2);
-            camera.rotation.y +=Math.PI/2;
+        case 'e':
+            if (directionPointer - 1 <0){
+                directionPointer = 3;
+                break;
+            }
+            else{
+                directionPointer -=1;
+            }
+            //moves clock wise
+            break;
+        case 'q':
+            if (directionPointer + 1 >3){
+                directionPointer = 0;
+                break;
+            }
+            else{
+                directionPointer +=1;
+            }
+            //moves counter clock wise  
+            break;
 
+        
     }
+    camera.rotation.y = direction[directionPointer];
   })
