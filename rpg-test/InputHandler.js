@@ -1,7 +1,4 @@
 import './style.css'
-
-import * as THREE from 'three';
-import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
 // const {camera} = require('./main.js');
 // const {window} = require('./main.js');
 import { camera } from './main.js'
@@ -17,20 +14,8 @@ window.addEventListener('keydown', function(event){
     console.log("The rotation is ", camera.rotation.y);
     //camera.rotation.y = what you are looking at 
     
-
-
-
     switch(event.key){
-        case 'w':
-
-            camera.y += 0.1;
-            break;  
-        case 's':
-            break;
-        case 'd':
-            break;
-        case 'a':
-            break;
+        //send signal to a function that will handle any key that isn't e or q... this function determins movement on the grid 
         case 'e':
             if (directionPointer - 1 <0){
                 directionPointer = 3;
@@ -51,8 +36,36 @@ window.addEventListener('keydown', function(event){
             }
             //moves counter clock wise  
             break;
-
+        default:
+            HandleGridMovement(event.key);
         
     }
     camera.rotation.y = direction[directionPointer];
-  })
+})
+var Level =1;
+var LastLevel = 0;
+var LevelGrid;
+var PlayerPosition = [1,1];
+
+export {LevelGrid};
+export {PlayerPosition};
+
+function LoadLevel(){
+    if (Level != LastLevel){
+        //load level ...
+        LevelGrid = [
+            [1,1,1]
+            [1,0,1]
+            [1,1,1]
+        ]
+    }
+}
+function HandleGridMovement( keyValue){
+    if (typeof(LevelGrid) !== 'undefined') {
+    }
+    else{
+        LoadLevel();
+    }
+
+}
+
