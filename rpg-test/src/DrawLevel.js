@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 //rendering objects
-import {scene,camera, renderer} from "./main.js"
+import {scene,camera, renderer} from "./init.js"
 import { createMachine, interpret } from 'xstate';
 
 //player and world data 
@@ -41,7 +41,7 @@ function show_image(src, width, height, alt) {
     document.body.appendChild(img);
 }
 var CubeBuffer = [];
-import {CellHandlerDict} from "/CellHandler.js";
+import {CellHandlerDict} from "./CellHandler.js";
 // camera.addEventListener('change', animate);
 function animate(){
     //basicallly main...
