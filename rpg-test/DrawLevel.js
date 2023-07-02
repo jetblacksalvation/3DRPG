@@ -2,8 +2,10 @@ import * as THREE from 'three';
 //rendering objects
 import {scene,camera, renderer} from "./main.js"
 import { createMachine, interpret } from 'xstate';
+
 //player and world data 
 var LevelGrid = [];
+const image = document.getElementById("Show_Image");
 
 var PlayerPosition =[];// x and z are used, camera is bound to y i think? 
 
@@ -12,7 +14,7 @@ camera.add( listener );
 const sound = new THREE.Audio( listener );
 
 const audioLoader = new THREE.AudioLoader();
-audioLoader.load( 'Ikebukuro_Explore.mp3', function( buffer ) {
+audioLoader.load( 'Music/Ikebukuro_Explore.mp3', function( buffer ) {
 	sound.setBuffer( buffer );
 	sound.setLoop( true );
 	sound.setVolume( 0.5 );
@@ -22,17 +24,25 @@ audioLoader.load( 'Ikebukuro_Explore.mp3', function( buffer ) {
 // var fr=new FileReader();//use this later. 
 
 //change to be more dynamic later 
-const text = new THREE.TextureLoader().load("brickWall.png");
-
+scene.background = new THREE.TextureLoader().load( "Images/blue.png" )
 renderer.render(scene,camera);
 var HasLoadedScene = false;
-var blue = new THREE.TextureLoader().load("blue.png");
-var road = new THREE.TextureLoader().load("road.png")
+
 
 LoadLevel();
+function show_image(src, width, height, alt) {
+    var img = document.createElement("img");
+    img.src = src;
+    img.width = width;
+    img.height = height;
+    img.alt = alt;
 
+    // This next line will just add it to the <body> tag
+    document.body.appendChild(img);
+}
 var CubeBuffer = [];
 import {CellHandlerDict} from "/CellHandler.js";
+// camera.addEventListener('change', animate);
 function animate(){
     //basicallly main...
 
@@ -48,8 +58,18 @@ function animate(){
     // LoadLevel();
     //clear buffer later... 
     for(let x =0; LevelGrid !== 'undefined' && x<LevelGrid.length; x++){
-        // console.log("level grid length =", LevelGrid.length);
+        //  ("level grid length =", LevelGrid.length);
         for (let y =0; y <LevelGrid[x].length; y++){
+            for(let img in CellHandlerDict[LevelGrid[x][y]].dependancies){
+                // show_image(CellHandlerDict[LevelGrid[x][y]].dependancies[img], 10,10);
+                // var imgg= document.createElement('div');
+                // imgg.setAttribute('id','#overlay');
+                // imgg.source = CellHandlerDict[LevelGrid[x][y]].dependancies[img];
+                // const uiElement = document.querySelector( '' );
+		        // uiElement.style.display = 'none';
+            }
+
+
             CubeBuffer.push.apply(CubeBuffer,CellHandlerDict[LevelGrid[x][y]]['function']((x - PlayerPosition[0])*2, ( y - PlayerPosition[1])*2));
             // if (LevelGrid[x][y] !== 'undefined' && LevelGrid[x][y] == 1 ){
             //     CubeBuffer.push(new THREE.Mesh(new THREE.BoxGeometry(2,2,2), new THREE.MeshBasicMaterial({map:text})) );
@@ -68,6 +88,10 @@ function animate(){
     for(let x =0; CubeBuffer.length >0 && x <CubeBuffer.length; x++){
         scene.add(CubeBuffer[x]);
     }
+    for (var i= document.images.length; i-->0;){
+        document.images[i].parentNode.removeChild(document.images[i]);
+
+    }
     //add something here that handles events/ moments and states...
     renderer.render(scene,camera);
 
@@ -83,14 +107,12 @@ function LoadLevel(){
         LevelGrid.push.apply(LevelGrid, [ 
             [1,1,1,1,1,1,1],
             [1,0,0,0,0,0,1],
-            [1,1,1,0,1,0,0,1],
-            [1,1,1,1,1,1,0,1],
+            [1,1,1,0,0,0,0,1],
+            [1,1,1,1,2,1,0,1],
             [0,0,0,0,0,1,0,1],
             [0,0,0,0,0,1,0,1],
-            [0,0,0,0,0,1,0,1]
+            [0,0,0,0,0,1,0,1],
             [0,0,0,0,0,1,1,1]
-
-
         ]
             
         );
@@ -100,7 +122,9 @@ function LoadLevel(){
 
     }
 }
-
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
 var directionPointer = 0;
 var direction = [0, Math.PI/2, Math.PI ,(3*Math.PI)/2]
 camera.rotation.y = direction[directionPointer];
@@ -120,6 +144,7 @@ window.addEventListener('keydown', function(event){
             camera.position.z = 0;
             break;
         case 'w':
+
             if (directionPointer == 0){
                 if (LevelGrid[PlayerPosition[0]][PlayerPosition[1] -1] ==0 ){
                     PlayerPosition[1] -=1;
@@ -145,8 +170,20 @@ window.addEventListener('keydown', function(event){
 
                 // camera.position.x +=2;
             }
+            if (getRandomInt(10)){
+                //draw to screen also change music
+                sound.stop();
+                audioLoader.load( 'Music/20_Boss.mp3', function( buffer ) {
+                    sound.setBuffer( buffer );
+                    sound.setLoop( true );
+                    sound.setVolume( 0.5 );
+                    sound.play();
+                });
+                console.log("You have run Into a demon!!")
+            }
             break;
-
+        //e and q are for turning. using hard coded vals cause idgaf 
+        //i would be surprised if this code needs to be changed/ maintained in any way 
         case 'e':
             if (directionPointer - 1 <0){
                 directionPointer = 3;
@@ -171,9 +208,11 @@ window.addEventListener('keydown', function(event){
         //     HandleGridMovement(event.key);
         //f
     }
+
     console.log(directionPointer, 'is direction');
 
     camera.rotation.y = direction[directionPointer];
     console.log("The rotation is ", camera.rotation.y);
 
 })
+

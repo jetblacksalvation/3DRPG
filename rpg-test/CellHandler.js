@@ -25,7 +25,6 @@ class LoadThings{
     static LoadedInDict = {
     };//start off empty. If CellHandler is called, 
 };
-const Load = new LoadThings;
 
 const CellHandlerDict = {
     //here function must return a list
@@ -36,11 +35,11 @@ const CellHandlerDict = {
 
         var CubeBuffer = [];
  
-        CubeBuffer.push(new Mesh(new BoxGeometry(2,2,2), new MeshBasicMaterial({map:LoadThings.LoadedInDict[this.dependancies[0]]})));
-        CubeBuffer[CubeBuffer.length-1].position.x = xPosition;
-        CubeBuffer[CubeBuffer.length-1].position.y = 2;
-        //y is actually z here...
-        CubeBuffer[CubeBuffer.length-1].position.z =zPosition;
+        // CubeBuffer.push(new Mesh(new BoxGeometry(2,2,2), new MeshBasicMaterial({map:LoadThings.LoadedInDict[this.dependancies[0]]})));
+        // CubeBuffer[CubeBuffer.length-1].position.x = xPosition;
+        // CubeBuffer[CubeBuffer.length-1].position.y = 2;
+        // //y is actually z here...
+        // CubeBuffer[CubeBuffer.length-1].position.z =zPosition;
 
         CubeBuffer.push(new Mesh(new BoxGeometry(2,2,2), new MeshBasicMaterial({map:LoadThings.LoadedInDict[this.dependancies[1]]})));
         CubeBuffer[CubeBuffer.length-1].position.x = xPosition;
@@ -49,7 +48,7 @@ const CellHandlerDict = {
         CubeBuffer[CubeBuffer.length-1].position.z =zPosition;
         return CubeBuffer;
 
-    },'dependancies' :["blue.png", "road.png"], 'tileName':"RoadAndsky"},
+    },'dependancies' :["Images/blue.png", "Images/road.png"], 'tileName':"RoadAndsky"},
     1 : {'function':function(xPosition,zPosition){
         for(let x in this.dependancies){
             LoadThings.LoadIfNotLoaded(this.dependancies[x]);
@@ -60,7 +59,18 @@ const CellHandlerDict = {
         //y is actually z here...
         CubeBuffer[CubeBuffer.length-1].position.z =zPosition;
         return CubeBuffer;
-    }, 'dependancies' :["brickWall.png"], 'tileName':"bricks"}
+    }, 'dependancies' :["Images/brickWall.png"], 'tileName':"bricks"},
+    2 : {'function':function(xPosition,zPosition){
+        for(let x in this.dependancies){
+            LoadThings.LoadIfNotLoaded(this.dependancies[x]);
+        }
+        var CubeBuffer = [];
+        CubeBuffer.push(new Mesh(new BoxGeometry(2,2,2), new MeshBasicMaterial({map:LoadThings.LoadedInDict[this.dependancies[0]]})) );
+        CubeBuffer[CubeBuffer.length-1].position.x = xPosition;
+        //y is actually z here...
+        CubeBuffer[CubeBuffer.length-1].position.z =zPosition;
+        return CubeBuffer;
+    }, 'dependancies':["Images/brickDoor.png"]}
 };
 
 export {CellHandlerDict};
