@@ -1,18 +1,9 @@
 import * as THREE from 'three';
-//rendering objects
 
-//player and world data 
-
-
-
-
-// var fr=new FileReader();//use this later. 
-
-//change to be more dynamic later 
 
 
 // camera.addEventListener('change', animate);
-function animate(renderer, scene, camera){
+function DrawLevel(renderer, scene, camera){
     //basicallly main...
 
     //draw level here 

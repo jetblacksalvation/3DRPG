@@ -1,6 +1,8 @@
 import Game_Globals from "./init"
 import InputHandler from "./InputHandler"
 InputHandler;
-
-var num = 0;
+class number{
+    num = 0;
+}
+var num = new number();
 export {num};

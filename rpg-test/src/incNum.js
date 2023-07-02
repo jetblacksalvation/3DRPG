@@ -1,3 +1,3 @@
 import { num } from "./main";
-num +=1;
+num.num +=1;
 console.log("num =", num)

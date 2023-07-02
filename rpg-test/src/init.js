@@ -15,10 +15,10 @@ class Game_Globals{
     this.audioLoader = new THREE.AudioLoader()
     this.scene.background = new THREE.TextureLoader().load( "Images/blue.png" )
     this.audioLoader.load( 'Music/Ikebukuro_Explore.mp3', ( buffer ) =>{
-    this.sound.setBuffer( buffer );
-    this.sound.setLoop( true );
-    this.sound.setVolume( 0.5 );
-    this.sound.play();
+      this.sound.setBuffer( buffer );
+      this.sound.setLoop( true );
+      this.sound.setVolume( 0.5 );
+      this.sound.play();
     });
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -26,8 +26,9 @@ class Game_Globals{
 
 
 }
-Game_Globals_Instance = new Game_Globals();
-console.log(Game_Globals_Instance);
+// console.log(new Game_Globals());
+
+const Game_Globals_Instance = new Game_Globals();
 export default Game_Globals_Instance;
 // const renderer = new THREE.WebGLRenderer({
 //   canvas: document.querySelector('#bg'),

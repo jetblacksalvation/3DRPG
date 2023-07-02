@@ -92,5 +92,5 @@ class InputHandler{
 
     }
 }
-
-export default InputHandlerInstance = new InputHandler();
+const InputHandlerInstance = new InputHandler()
+export default InputHandlerInstance;
