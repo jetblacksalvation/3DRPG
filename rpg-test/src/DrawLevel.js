@@ -1,57 +1,40 @@
 import * as THREE from 'three';
-
-
-
-// camera.addEventListener('change', animate);
-function DrawLevel(renderer, scene, camera){
-    //basicallly main...
-
-    //draw level here 
-
-    requestAnimationFrame(animate);
-    renderer.renderLists.dispose();
-    for(let x =0; CubeBuffer.length >0&& x <CubeBuffer.length; x++){
-        scene.remove(CubeBuffer[x]);
-    }
-    CubeBuffer = [];
-
-    // LoadLevel();
-    //clear buffer later... 
-    for(let x =0; LevelGrid !== 'undefined' && x<LevelGrid.length; x++){
-        //  ("level grid length =", LevelGrid.length);
-        for (let y =0; y <LevelGrid[x].length; y++){
-            for(let img in CellHandlerDict[LevelGrid[x][y]].dependancies){
-                // show_image(CellHandlerDict[LevelGrid[x][y]].dependancies[img], 10,10);
-                // var imgg= document.createElement('div');
-                // imgg.setAttribute('id','#overlay');
-                // imgg.source = CellHandlerDict[LevelGrid[x][y]].dependancies[img];
-                // const uiElement = document.querySelector( '' );
-		        // uiElement.style.display = 'none';
-            }
-
-
-            CubeBuffer.push.apply(CubeBuffer,CellHandlerDict[LevelGrid[x][y]]['function']((x - PlayerPosition[0])*2, ( y - PlayerPosition[1])*2));
+import LoaderInstance from './CellHandler';
+const LevelandStateDrawer = {
+    "roam" : { "function":function(renderer, scene, camera) {
+        //basicallly main...
+    
+        //draw level here 
+        var LevelGrid = LoaderInstance.LevelGrid;
+        renderer.renderLists.dispose();
+        
+        for(let x =0; this['metaData']['CubeBuffer'].length >0&& x <this['metaData']['CubeBuffer'].length; x++){
+            scene.remove(this['metaData']['CubeBuffer'][x]);
         }
-        // console.log(LevelGrid[x], 'is x');
-    }
-    for(let x =0; CubeBuffer.length >0 && x <CubeBuffer.length; x++){
-        scene.add(CubeBuffer[x]);
-    }
-    for (var i= document.images.length; i-->0;){
-        document.images[i].parentNode.removeChild(document.images[i]);
+        
+    
+        // LoadLevel();
+        //clear buffer later... 
+        for(let x =0; LevelGrid !== 'undefined' && x<LevelGrid.length; x++){
+            //  ("level grid length =", LevelGrid.length);
+            for (let y =0; y <LevelGrid[x].length; y++){
+                
+    
+                this['metaData']['CubeBuffer'].push.apply(this['metaData']['CubeBuffer'],LoaderInstance.CellHandlerDict[LevelGrid[x][y]]['function']((x - LoaderInstance.PlayerPosition[0])*2, ( y - LoaderInstance.PlayerPosition[1])*2));
+            }
+            // console.log(LevelGrid[x], 'is x');
+        }
+        for(let x =0; this['metaData']['CubeBuffer'].length >0 && x <this['metaData']['CubeBuffer'].length; x++){
+            scene.add(this['metaData']['CubeBuffer'][x]);
+        }
 
-    }
-    renderer.render(scene,camera);
+        renderer.render(scene,camera);
+    
+    }, "metaData" :{"CubeBuffer" :[]}
+    }//put refs to metaData here. MetaData is a list of vargs used by invoked function. Function will be bound to dict 
+};
 
-}
 
-
-// animate()
-//DIRECTION HANDLER 
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-}
-
+export default LevelandStateDrawer;
 
 

@@ -30,28 +30,3 @@ class Game_Globals{
 
 const Game_Globals_Instance = new Game_Globals();
 export default Game_Globals_Instance;
-// const renderer = new THREE.WebGLRenderer({
-//   canvas: document.querySelector('#bg'),
-
-// });
-// camera.add( listener );
-// const sound = new THREE.Audio( listener );
-
-// const audioLoader = new THREE.AudioLoader();
-// audioLoader.load( 'Music/Ikebukuro_Explore.mp3', function( buffer ) {
-// 	sound.setBuffer( buffer );
-// 	sound.setLoop( true );
-// 	sound.setVolume( 0.5 );
-// 	sound.play();
-// });
-// renderer.setPixelRatio(window.devicePixelRatio);
-// renderer.setSize(window.innerWidth, window.innerHeight);
-
-
-
-// const geometry = new THREE.TorusGeometry(1,1,1);
-// const material = new THREE.MeshStandardMaterial({ });
-// const torus = new THREE.Mesh(geometry, material);
-
-
-

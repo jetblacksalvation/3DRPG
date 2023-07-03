@@ -1,14 +1,21 @@
 import Game_Globals_Instance from "./init";
-import CellHandler from "./CellHandler";
+import LoaderInstance from "./CellHandler";
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+
 class InputHandler{
     constructor(){
         this.lastKey = '';
         this.directionPointer = 0;
         this.direction = [0, Math.PI/2, Math.PI ,(3*Math.PI)/2]
-        
+        console.log("created input handler");
 
         this.state;//pass state to inputhandler..
         window.addEventListener('keydown', (e) =>{
+            var CellHandler = LoaderInstance
+            if(CellHandler.LevelGrid.length > 0)
             switch(e.key){
         //send signal to a function that will handle any key that isn't e or q... this function determins movement on the grid 
             case 'r':
@@ -18,39 +25,39 @@ class InputHandler{
                 break;
             case 'w':
 
-                if (directionPointer == 0){
+                if (this.directionPointer == 0){
                     if (CellHandler.LevelGrid[CellHandler.PlayerPosition[0]][CellHandler.PlayerPosition[1] -1] ==0 ){
-                        PlayerPosition[1] -=1;
+                        CellHandler.PlayerPosition[1] -=1;
                     }
                     // camera.position.z -=2;
                 }
-                else if(directionPointer ==1){
+                else if(this.directionPointer ==1){
                     if(CellHandler.LevelGrid[CellHandler.PlayerPosition[0] -1][CellHandler.PlayerPosition[1]] == 0){
-                        PlayerPosition[0] -=1;
+                        CellHandler.PlayerPosition[0] -=1;
                     }
                     // camera.position.x -=2;
                 }
-                else if(directionPointer ==2){
+                else if(this.directionPointer ==2){
                     if(CellHandler.LevelGrid[CellHandler.PlayerPosition[0]][CellHandler.PlayerPosition[1] +1 ] ==0){
-                        PlayerPosition[1] +=1;
+                        CellHandler.PlayerPosition[1] +=1;
                     }
                     // camera.position.z +=2;
                 }
-                else if(directionPointer ==3){
-                    if(CellHandler.LevelGrid[CellHandler.PlayerPosition[0] +1][PlayerPosition[1]] == 0){
-                        PlayerPosition[0] +=1;
+                else if(this.directionPointer ==3){
+                    if(CellHandler.LevelGrid[CellHandler.PlayerPosition[0] +1][CellHandler.PlayerPosition[1]] == 0){
+                        CellHandler.PlayerPosition[0] +=1;
                     }
 
                     // camera.position.x +=2;
                 }
                 if (getRandomInt(10)){
                     //draw to screen also change music
-                    sound.stop();
-                    audioLoader.load( 'Music/20_Boss.mp3', function( buffer ) {
-                        sound.setBuffer( buffer );
-                        sound.setLoop( true );
-                        sound.setVolume( 0.5 );
-                        sound.play();
+                    Game_Globals_Instance.sound.stop();
+                    Game_Globals_Instance.audioLoader.load( 'Music/20_Boss.mp3', ( buffer ) => {
+                        Game_Globals_Instance.sound.setBuffer( buffer );
+                        Game_Globals_Instance.sound.setLoop( true );
+                        Game_Globals_Instance.sound.setVolume( 0.5 );
+                        Game_Globals_Instance.sound.play();
                     });
                     console.log("You have run Into a demon!!")
                 }
@@ -83,12 +90,14 @@ class InputHandler{
             }
 
             console.log(this.directionPointer, 'is direction');
-            console.log(Game_Globals.camera)
-            Game_Globals.camera.rotation.y = this.direction[this.directionPointer];
-            console.log("The rotation is ", Game_Globals.camera.rotation.y);
+            // console.log(Game_Globals_Instance.camera)
+            Game_Globals_Instance.camera.rotation.y = this.direction[this.directionPointer];
+            console.log("The rotation is ", Game_Globals_Instance.camera.rotation.y);
+            this.lastKey = e.key;
+
             }
         );
-        window.addEventListener('keyup', (e)=>{console.log("keyup is", e)});
+        // window.addEventListener('keyup', (e)=>{var CellHandler = LoaderInstance.CellHandlerDict});
 
     }
 }

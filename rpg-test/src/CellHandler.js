@@ -26,8 +26,8 @@ import {BoxGeometry, MeshBasicMaterial,TextureLoader,Mesh} from 'three';
 // }
 
 
-export default class LoadThings{
-    PlayerPosition = [0,0];
+class LoadThings{
+    PlayerPosition = [1,1];
     LevelGrid = [];
 
     static LoadIfNotLoaded(string){
@@ -95,7 +95,7 @@ export default class LoadThings{
         }, 'dependancies':["Images/brickDoor.png"]}
     };//for drawing cells
     LevelHandlerDict = {
-        1 : {"function":function (LevelGrid, PlayerPosition){
+        1 : {"function":function (LevelGrid, PlayerPosition) {
             //Level grid is an array. PlayerPosition is also and array, but only ever has two elements. 
             //first index is x, second is z 
         
@@ -125,3 +125,4 @@ export default class LoadThings{
 };
 
 
+const LoaderInstance = new LoadThings; export default LoaderInstance;
