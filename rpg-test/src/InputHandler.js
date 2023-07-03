@@ -14,8 +14,7 @@ class InputHandler{
 
         this.state;//pass state to inputhandler..
         window.addEventListener('keydown', (e) =>{
-            var CellHandler = LoaderInstance
-            if(CellHandler.LevelGrid.length > 0)
+            if(LoaderInstance.LevelGrid.length > 0)
             switch(e.key){
         //send signal to a function that will handle any key that isn't e or q... this function determins movement on the grid 
             case 'r':
@@ -26,26 +25,26 @@ class InputHandler{
             case 'w':
 
                 if (this.directionPointer == 0){
-                    if (CellHandler.LevelGrid[CellHandler.PlayerPosition[0]][CellHandler.PlayerPosition[1] -1] ==0 ){
-                        CellHandler.PlayerPosition[1] -=1;
+                    if (LoaderInstance.LevelGrid[LoaderInstance.PlayerPosition[0]][LoaderInstance.PlayerPosition[1] -1] ==0 ){
+                        LoaderInstance.PlayerPosition[1] -=1;
                     }
                     // camera.position.z -=2;
                 }
                 else if(this.directionPointer ==1){
-                    if(CellHandler.LevelGrid[CellHandler.PlayerPosition[0] -1][CellHandler.PlayerPosition[1]] == 0){
-                        CellHandler.PlayerPosition[0] -=1;
+                    if(LoaderInstance.LevelGrid[LoaderInstance.PlayerPosition[0] -1][LoaderInstance.PlayerPosition[1]] == 0){
+                        LoaderInstance.PlayerPosition[0] -=1;
                     }
                     // camera.position.x -=2;
                 }
                 else if(this.directionPointer ==2){
-                    if(CellHandler.LevelGrid[CellHandler.PlayerPosition[0]][CellHandler.PlayerPosition[1] +1 ] ==0){
-                        CellHandler.PlayerPosition[1] +=1;
+                    if(LoaderInstance.LevelGrid[LoaderInstance.PlayerPosition[0]][LoaderInstance.PlayerPosition[1] +1 ] ==0){
+                        LoaderInstance.PlayerPosition[1] +=1;
                     }
                     // camera.position.z +=2;
                 }
                 else if(this.directionPointer ==3){
-                    if(CellHandler.LevelGrid[CellHandler.PlayerPosition[0] +1][CellHandler.PlayerPosition[1]] == 0){
-                        CellHandler.PlayerPosition[0] +=1;
+                    if(LoaderInstance.LevelGrid[LoaderInstance.PlayerPosition[0] +1][LoaderInstance.PlayerPosition[1]] == 0){
+                        LoaderInstance.PlayerPosition[0] +=1;
                     }
 
                     // camera.position.x +=2;
@@ -97,7 +96,7 @@ class InputHandler{
 
             }
         );
-        // window.addEventListener('keyup', (e)=>{var CellHandler = LoaderInstance.CellHandlerDict});
+        // window.addEventListener('keyup', (e)=>{var LoaderInstance = LoaderInstance.LoaderInstanceDict});
 
     }
 }

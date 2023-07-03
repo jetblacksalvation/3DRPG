@@ -7,7 +7,6 @@ const LevelandStateDrawer = {
         //draw level here 
         var LevelGrid = LoaderInstance.LevelGrid;
         renderer.renderLists.dispose();
-        
         for(let x =0; this['metaData']['CubeBuffer'].length >0&& x <this['metaData']['CubeBuffer'].length; x++){
             scene.remove(this['metaData']['CubeBuffer'][x]);
         }
@@ -15,6 +14,7 @@ const LevelandStateDrawer = {
     
         // LoadLevel();
         //clear buffer later... 
+        this['metaData']['CubeBuffer'] = [];
         for(let x =0; LevelGrid !== 'undefined' && x<LevelGrid.length; x++){
             //  ("level grid length =", LevelGrid.length);
             for (let y =0; y <LevelGrid[x].length; y++){
